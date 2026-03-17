@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Grosary_net")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0c5e5fa39c781f58720aed8647b137f259e6b89e")]
 [assembly: System.Reflection.AssemblyProductAttribute("Grosary_net")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Grosary_net")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
