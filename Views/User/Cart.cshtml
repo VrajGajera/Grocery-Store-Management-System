@@ -1,0 +1,99 @@
+@* @model IEnumerable<Grosary_net.Models.CartItem> *@
+@model List<Grosary_net.Models.CartItem>
+
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4" style="color: #2C3E50;">Shopping Cart</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5">
+            <i class="fas fa-shopping-cart fa-4x mb-3" style="color: #27AE60;"></i>
+            <h4 style="color: #2C3E50;">Your cart is empty</h4>
+            <p class="text-muted">Browse our products and add items to your cart</p>
+            <a href="/User/ProductList" class="btn" style="background-color: #27AE60; color: white;">
+                <i class="fas fa-store me-2"></i>Continue Shopping
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-8">
+                @foreach (var item in Model)
+                {
+                    <div class="card mb-3">
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <img src="@item.ImageUrl" class="img-fluid rounded-start" alt="@item.ProductName" style="height: 100px; width: 100%; object-fit: cover;">
+                            </div>
+                            <div class="col-md-10">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-4">
+                                            <h6 class="card-title" style="color: #2C3E50;">@item.ProductName</h6>
+                                            <p class="card-text">$@item.Price each</p>
+                                        </div>
+                                        <div class="col-md-3">
+    <div class="d-flex align-items-center">
+
+<a href="/User/DecreaseQuantity?productId=@item.ProductId"
+   class="btn btn-outline-secondary btn-sm">-</a>
+
+<input type="text"
+       value="@item.Quantity"
+       class="form-control text-center mx-2"
+       style="width:60px;" readonly>
+
+<a href="/User/IncreaseQuantity?productId=@item.ProductId"
+   class="btn btn-outline-secondary btn-sm">+</a>
+
+</div>
+</div>
+                                        <div class="col-md-3">
+                                            <span class="h6">$@item.Subtotal</span>
+                                        </div>
+                                        <div class="col-md-2 text-end">
+                                            <a href="/User/RemoveFromCart?productId=@item.ProductId" class="btn btn-sm" style="color: #dc3545;">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header" style="background-color: #2C3E50; color: white;">
+                        <h5 class="mb-0">Order Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal:</span>
+                            <span>$@Model.Sum(i => i.Subtotal).ToString("F2")</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Shipping:</span>
+                            <span>$5.00</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-3">
+                            <strong>Total:</strong>
+                            <strong style="color: #27AE60;">$@((Model.Sum(i => i.Subtotal) + 5).ToString("F2"))</strong>
+                        </div>
+                        <a href="/User/Checkout" class="btn w-100" style="background-color: #27AE60; color: white;">
+                            <i class="fas fa-credit-card me-2"></i>Proceed to Checkout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Grocery Store</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+<header>
+<nav class="navbar navbar-expand-sm navbar-dark fixed-top" style="background-color: #2C3E50;">
+<div class="container">
+
+<a class="navbar-brand" href="/">
+<i class="fas fa-store me-2" style="color: #27AE60;"></i>
+<span style="color: white;">GroceryStore</span>
+</a>
+
+<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+<span class="navbar-toggler-icon"></span>
+</button>
+
+<div class="collapse navbar-collapse" id="navbarNav">
+<ul class="navbar-nav ms-auto">
+
+@if (Context.Session.GetString("UserRole") == "Admin")
+{
+<li class="nav-item">
+<a class="nav-link text-light" href="/Admin/ProductList">
+<i class="fas fa-box me-1" style="color:#27AE60;"></i>Products
+</a>
+</li>
+
+<li class="nav-item">
+<a class="nav-link text-light" href="/Admin/OrderList">
+<i class="fas fa-shopping-cart me-1" style="color:#27AE60;"></i>Orders
+</a>
+</li>
+
+<li class="nav-item">
+<a class="nav-link text-light" href="/Admin/Dashboard">
+<i class="fas fa-user-shield me-1" style="color:#27AE60;"></i>System Admin
+</a>
+</li>
+
+<li class="nav-item">
+<a class="nav-link text-light" href="/Account/Logout">
+<i class="fas fa-sign-out-alt me-1" style="color:#27AE60;"></i>Logout
+</a>
+</li>
+}
+
+else if (Context.Session.GetString("UserId") != null)
+{
+
+<li class="nav-item">
+<a class="nav-link text-light" href="/User/ProductList">
+<i class="fas fa-shopping-basket me-1" style="color:#27AE60;"></i>Products
+</a>
+</li>
+
+<li class="nav-item">
+<a class="nav-link text-light" href="/User/Cart">
+<i class="fas fa-shopping-cart me-1" style="color:#27AE60;"></i>Cart
+</a>
+</li>
+
+<li class="nav-item">
+<a class="nav-link text-light" href="/User/OrderHistory">
+<i class="fas fa-history me-1" style="color:#27AE60;"></i>Orders
+</a>
+</li>
+
+<li class="nav-item">
+<span class="nav-link text-white">
+<i class="fas fa-user me-1" style="color:#27AE60;"></i>
+@Context.Session.GetString("FullName")
+</span>
+</li>
+
+<li class="nav-item">
+<a class="nav-link text-light" href="/Account/Logout">
+<i class="fas fa-sign-out-alt me-1" style="color:#27AE60;"></i>Logout
+</a>
+</li>
+}
+
+else
+{
+
+<li class="nav-item">
+<a class="nav-link text-light @(ViewContext.RouteData.Values["action"]?.ToString()=="Index" ? "active" : "")"
+asp-controller="Home" asp-action="Index">
+<i class="fas fa-home me-1"></i> Home
+</a>
+</li>
+
+<li class="nav-item">
+<a class="nav-link text-light @(ViewContext.RouteData.Values["action"]?.ToString()=="About" ? "active" : "")"
+asp-controller="Home" asp-action="About">
+<i class="fas fa-info-circle me-1"></i> About Us
+</a>
+</li>
+
+<li class="nav-item">
+<a class="nav-link text-light @(ViewContext.RouteData.Values["action"]?.ToString()=="Contact" ? "active" : "")"
+asp-controller="Home" asp-action="Contact">
+<i class="fas fa-envelope me-1"></i> Contact Us
+</a>
+</li>
+
+<li class="nav-item">
+<a class="nav-link text-light @(ViewContext.RouteData.Values["action"]?.ToString()=="SignIn" ? "active" : "")"
+href="/Account/SignIn">
+<i class="fas fa-sign-in-alt me-1"></i> Sign In
+</a>
+</li>
+
+<li class="nav-item">
+<a class="nav-link text-light @(ViewContext.RouteData.Values["action"]?.ToString()=="AdminLogin" ? "active" : "")"
+href="/Account/AdminLogin">
+<i class="fas fa-user-shield me-1"></i> Admin
+</a>
+</li>
+
+}
+
+</ul>
+</div>
+</div>
+</nav>
+</header>
+
+<main role="main" class="pb-3">
+
+<div class="container mt-3">
+
+@if (ViewData["Title"]?.ToString() != "Home" && ViewData["Title"]?.ToString() != "Privacy Policy")
+{
+<a href="javascript:history.back()" class="btn btn-secondary mb-3">
+<i class="fas fa-arrow-left"></i> Back
+</a>
+}
+
+</div>
+
+@RenderBody()
+
+</main>
+
+<footer class="border-top footer text-muted"
+        style="background-color:#2C3E50; color:white!important; bottom:0; width:100%;">
+    <div class="container text-center py-3">
+        © 2024 Grocery Store Management System - All rights reserved
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+@await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

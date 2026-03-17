@@ -1,0 +1,199 @@
+@model IEnumerable<Grosary_net.Models.CartItem>
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4" style="color: #2C3E50;">Checkout</h2>
+
+    <div class="row">
+
+        <!-- Shipping + Payment -->
+        <div class="col-md-8">
+
+            <div class="card">
+                <div class="card-header" style="background-color:#2C3E50;color:white;">
+                    <h5 class="mb-0">Shipping Information</h5>
+                </div>
+
+                <div class="card-body">
+
+                    <form asp-action="PlaceOrder" method="post">
+
+                        <!-- Address -->
+                        <div class="mb-3">
+                            <label class="form-label" style="color:#2C3E50;">
+                                Shipping Address
+                            </label>
+
+                            <textarea name="shippingAddress"
+                                      class="form-control"
+                                      rows="3"
+                                      required>
+123 Main Street, Apt 4B, New York, NY 10001
+                            </textarea>
+                        </div>
+
+                        <!-- Payment Method -->
+                        <div class="mb-3">
+
+                            <label class="form-label" style="color:#2C3E50;">
+                                Payment Method
+                            </label>
+
+                            <select name="paymentMethod"
+                                    id="paymentMethod"
+                                    class="form-control"
+                                    onchange="showPaymentForm()"
+                                    required>
+
+                                <option value="">Select Payment Method</option>
+                                <option value="Credit Card">Credit Card</option>
+                                <option value="Debit Card">Debit Card</option>
+                                <option value="Cash on Delivery">Cash on Delivery</option>
+                                <option value="PayPal">PayPal</option>
+
+                            </select>
+
+                        </div>
+
+                        <!-- Payment Details -->
+                        <div id="paymentDetails"></div>
+
+                        <button type="submit"
+                                class="btn mt-3"
+                                style="background-color:#27AE60;color:white;">
+
+                            <i class="fas fa-check-circle me-2"></i>
+                            Place Order
+
+                        </button>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- Order Items -->
+        <div class="col-md-4">
+
+            <div class="card">
+
+                <div class="card-header"
+                     style="background-color:#2C3E50;color:white;">
+                    <h5 class="mb-0">Order Items</h5>
+                </div>
+
+                <div class="card-body">
+
+                    @foreach (var item in Model)
+                    {
+                        <div class="d-flex justify-content-between mb-2">
+
+                            <span>@item.ProductName x @item.Quantity</span>
+
+                            <span>$@item.Subtotal</span>
+
+                        </div>
+                    }
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between">
+
+                        <strong>Total:</strong>
+
+                        <strong style="color:#27AE60;">
+                            $@ViewBag.Total
+                        </strong>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+
+function showPaymentForm(){
+
+    var method = document.getElementById("paymentMethod").value;
+    var html = "";
+
+    if(method === "Credit Card" || method === "Debit Card"){
+
+        html = `
+        <div class="card p-3 mt-2">
+
+            <h6>Card Details</h6>
+
+            <div class="mb-2">
+                <label>Card Number</label>
+                <input type="text" name="cardNumber"
+                       class="form-control"
+                       placeholder="1234 5678 9012 3456"
+                       required>
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <label>Expiry Date</label>
+                    <input type="text"
+                           name="expiry"
+                           class="form-control"
+                           placeholder="MM/YY"
+                           required>
+                </div>
+
+                <div class="col-md-6">
+                    <label>CVV</label>
+                    <input type="password"
+                           name="cvv"
+                           class="form-control"
+                           placeholder="123"
+                           required>
+                </div>
+
+            </div>
+
+        </div>`;
+    }
+
+
+    if(method === "PayPal"){
+
+        html = `
+        <div class="card p-3 mt-2">
+
+            <h6>PayPal Payment</h6>
+
+            <div class="mb-2">
+
+                <label>PayPal Email</label>
+
+                <input type="email"
+                       name="paypalEmail"
+                       class="form-control"
+                       placeholder="example@gmail.com"
+                       required>
+
+            </div>
+
+        </div>`;
+    }
+
+    document.getElementById("paymentDetails").innerHTML = html;
+
+}
+
+</script>

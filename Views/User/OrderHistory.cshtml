@@ -1,0 +1,219 @@
+@model IEnumerable<Grosary_net.Models.Order>
+
+@{
+    ViewData["Title"] = "Order History";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4" style="color: #2C3E50;">Order History</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5">
+            <i class="fas fa-history fa-4x mb-3" style="color: #27AE60;"></i>
+            <h4 style="color: #2C3E50;">No orders yet</h4>
+            <p class="text-muted">Start shopping to place your first order</p>
+
+            <a href="/User/ProductList"
+               class="btn"
+               style="background-color:#27AE60;color:white;">
+
+                <i class="fas fa-store me-2"></i>Shop Now
+
+            </a>
+        </div>
+    }
+    else
+    {
+        foreach (var order in Model)
+        {
+            <div class="card mb-4 shadow-sm">
+
+                <!-- Order Header -->
+                <div class="card-header"
+                     style="background-color:#2C3E50;color:white;">
+
+                    <div class="row">
+
+                        <div class="col-md-4">
+                            <strong>Order #@order.Id</strong>
+                        </div>
+
+                        <div class="col-md-4 text-center">
+                            @order.OrderDate.ToString("MMMM dd, yyyy")
+                        </div>
+
+                        <div class="col-md-4 text-end">
+
+                            <span class="badge"
+                                  style="background-color:
+                                  @(order.Status == Grosary_net.Models.OrderStatus.Completed ? "#27AE60" :
+                                    order.Status == Grosary_net.Models.OrderStatus.Pending ? "#ffc107" :
+                                    "#2C3E50")">
+
+                                @order.Status
+
+                            </span>
+
+                             @* ===== CANCEL ORDER BUTTON (NEW UPDATE) ===== *@
+    @if (order.Status == Grosary_net.Models.OrderStatus.Pending)
+    {
+        <form asp-action="CancelOrder"
+              asp-controller="User"
+              method="post"
+              style="display:inline;">
+
+            <input type="hidden"
+                   name="orderId"
+                   value="@order.Id" />
+
+            <button type="submit"
+                    class="btn btn-sm ms-2"
+                    style="background-color:#dc3545;color:white;"
+                    onclick="return confirm('Are you sure you want to cancel this order?');">
+
+                <i class="fas fa-times me-1"></i>
+                Cancel
+
+            </button>
+
+        </form>
+    }
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Order Body -->
+                <div class="card-body">
+
+                    @if (order.Items != null && order.Items.Any())
+                    {
+                        <div class="table-responsive">
+
+                            <table class="table align-middle">
+
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    @foreach (var item in order.Items)
+                                    {
+                                        <tr>
+
+                                            <td>
+
+                                                <div class="d-flex align-items-center">
+
+                                                    <img src="@item.ImageUrl"
+                                                         alt="@item.ProductName"
+                                                         style="width:55px;height:55px;
+                                                         object-fit:cover;
+                                                         border-radius:8px;
+                                                         margin-right:12px;
+                                                         border:1px solid #eee;" />
+
+                                                    <div>
+
+                                                        <strong>
+                                                            @item.ProductName
+                                                        </strong>
+
+                                                        <div class="text-muted small">
+                                                            $@item.Price each
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </td>
+
+                                            <td>
+                                                <span class="badge bg-secondary">
+                                                    @item.Quantity
+                                                </span>
+                                            </td>
+
+                                            <td>
+                                                $@item.Price
+                                            </td>
+
+                                            <td>
+                                                <strong>
+                                                    $@item.Subtotal
+                                                </strong>
+                                            </td>
+
+                                        </tr>
+                                    }
+
+                                </tbody>
+
+                                <tfoot>
+
+                                    <tr>
+
+                                        <td colspan="3"
+                                            class="text-end">
+
+                                            <strong>Total:</strong>
+
+                                        </td>
+
+                                        <td>
+
+                                            <strong
+                                                style="color:#27AE60;font-size:16px;">
+
+                                                $@order.TotalAmount
+
+                                            </strong>
+
+                                        </td>
+
+                                    </tr>
+
+                                </tfoot>
+
+                            </table>
+
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No items found for this order.</p>
+                    }
+
+                    <!-- Shipping & Payment -->
+                    <div class="mt-3">
+
+                        <small class="text-muted">
+
+                            <i class="fas fa-map-marker-alt me-1"></i>
+                            @order.ShippingAddress
+
+                            |
+
+                            <i class="fas fa-credit-card me-1"></i>
+                            @order.PaymentMethod
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+    }
+
+</div>

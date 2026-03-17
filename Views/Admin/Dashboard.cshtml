@@ -1,0 +1,162 @@
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "_AdminLayout";
+}
+
+<div class="row">
+    <div class="col-md-3 mb-4">
+        <div class="card text-white" style="background-color: #2C3E50;">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="mb-0">Total Products</h6>
+                        <h2 class="mt-2 mb-0">@ViewBag.TotalProducts</h2>
+                    </div>
+                    <i class="fas fa-box fa-3x" style="color: #27AE60;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-4">
+        <div class="card text-white" style="background-color: #2C3E50;">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="mb-0">Total Orders</h6>
+                        <h2 class="mt-2 mb-0">@ViewBag.TotalOrders</h2>
+                    </div>
+                    <i class="fas fa-shopping-cart fa-3x" style="color: #27AE60;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-4">
+        <div class="card text-white" style="background-color: #2C3E50;">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="mb-0">Total Customers</h6>
+                        <h2 class="mt-2 mb-0">@ViewBag.TotalCustomers</h2>
+                    </div>
+                    <i class="fas fa-users fa-3x" style="color: #27AE60;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-4">
+        <div class="card text-white" style="background-color: #2C3E50;">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="mb-0">Low Stock</h6>
+                        <h2 class="mt-2 mb-0">@ViewBag.LowStock</h2>
+                    </div>
+                    <i class="fas fa-exclamation-triangle fa-3x" style="color: #27AE60;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+
+    <!-- Quick Actions -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header" style="background-color: #2C3E50; color: white;">
+                <h5 class="mb-0">Quick Actions</h5>
+            </div>
+
+            <div class="card-body">
+                <div class="d-grid gap-2">
+
+                    <a href="/Admin/AddProduct" class="btn" style="background-color: #27AE60; color: white;">
+                        <i class="fas fa-plus-circle me-2"></i>Add New Product
+                    </a>
+
+                    <a href="/Admin/ProductList" class="btn" style="background-color: #2C3E50; color: white;">
+                        <i class="fas fa-list me-2"></i>View All Products
+                    </a>
+
+                    <a href="/Admin/OrderList" class="btn" style="background-color: #27AE60; color: white;">
+                        <i class="fas fa-truck me-2"></i>Manage Orders
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Orders -->
+    <div class="col-md-6">
+        <div class="card">
+
+            <div class="card-header" style="background-color: #2C3E50; color: white;">
+                <h5 class="mb-0">Recent Orders</h5>
+            </div>
+
+            <div class="card-body">
+
+                @{
+                    var recentOrders = ViewBag.RecentOrders as List<Grosary_net.Models.Order>;
+                }
+
+                @if (recentOrders != null && recentOrders.Any())
+                {
+                    <div class="list-group">
+
+                        @foreach (var order in recentOrders)
+                        {
+                            <div class="list-group-item">
+
+                                <div class="d-flex justify-content-between">
+
+                                    <div>
+                                        <strong>Order #@order.Id</strong>
+                                        <br />
+                                        <small>@order.UserName</small>
+                                    </div>
+
+                                    <div class="text-end">
+
+                                        <span class="badge"
+                                              style="background-color:
+                                              @(order.Status == Grosary_net.Models.OrderStatus.Completed ? "#27AE60" : "#2C3E50")">
+
+                                            @order.Status
+
+                                        </span>
+
+                                        <br />
+
+                                        <small>$@order.TotalAmount</small>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        }
+
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted">No recent orders</p>
+                }
+                @if (TempData["AdminMessage"] != null)
+{
+<div class="alert alert-warning">
+    @TempData["AdminMessage"]
+</div>
+}
+
+            </div>
+
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,250 @@
+@model IEnumerable<Grosary_net.Models.Product>
+
+@{
+    ViewData["Title"] = "Products";
+    var categories = Model.Select(p => p.Category).Distinct().OrderBy(c => c).ToList();
+}
+
+<style>
+
+.filter-box{
+background:#f5f5fb;
+padding:10px 15px;
+border-radius:12px;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+.filter-box label{
+display:block;
+font-weight:600;
+font-size:13px;
+margin-bottom:4px;
+}
+
+.filter-dropdown{
+width:150px;
+padding:6px 10px;
+border-radius:8px;
+border:1px solid #ccc;
+cursor:pointer;
+}
+
+</style>
+
+<div class="container mt-4">
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+<h2 style="color: #2C3E50; border-left: 5px solid #27AE60; padding-left: 15px;">
+<i class="fas fa-store me-2" style="color: #27AE60;"></i>
+Our Fresh Products
+</h2>
+
+<div class="d-flex align-items-center gap-3">
+
+<div class="filter-box">
+
+<label>Filter by</label>
+
+<select id="categoryFilter" class="filter-dropdown">
+
+<option value="All">All</option>
+
+@foreach (var cat in categories)
+{
+<option value="@cat">@cat</option>
+}
+
+</select>
+
+</div>
+
+<a asp-controller="Admin"
+asp-action="AddProduct"
+class="btn"
+style="background-color:#27AE60; color:white; border-radius:8px; padding:8px 16px;">
+
+<i class="fas fa-plus me-1"></i>
+Add Item
+
+</a>
+
+</div>
+
+</div>
+
+@foreach (var category in categories)
+{
+var categoryProducts = Model.Where(p => p.Category == category).ToList();
+
+<div class="mb-5 category-section" data-category="@category">
+
+<h4 class="mb-3" style="color: #2C3E50; border-bottom: 2px solid #27AE60; padding-bottom: 10px;">
+<i class="fas fa-tag me-2" style="color: #27AE60;"></i>@category
+</h4>
+
+<div class="row">
+
+@foreach (var product in categoryProducts)
+{
+
+<div class="col-xl-3 col-lg-4 col-md-6 mb-4 product-card" data-category="@product.Category">
+
+<div class="card h-100 shadow-sm" style="border-radius: 15px; overflow: hidden;">
+
+<div class="position-relative" style="height:200px; overflow:hidden;">
+
+<img src="@product.ImageUrl" class="card-img-top" alt="@product.Name"
+style="width:100%;height:100%;object-fit:cover;">
+
+<span class="position-absolute top-0 start-0 m-2 badge"
+style="background:#2C3E50;color:white;border-radius:20px;">
+
+@product.Category
+
+</span>
+
+@if (product.StockQuantity < 10 && product.StockQuantity > 0)
+{
+<span class="position-absolute top-0 end-0 m-2 badge"
+style="background:#dc3545;color:white;border-radius:20px;">
+Low Stock
+</span>
+}
+else if (product.StockQuantity > 0)
+{
+<span class="position-absolute top-0 end-0 m-2 badge"
+style="background:#27AE60;color:white;border-radius:20px;">
+In Stock
+</span>
+}
+else
+{
+<span class="position-absolute top-0 end-0 m-2 badge"
+style="background:#6c757d;color:white;border-radius:20px;">
+Out of Stock
+</span>
+}
+
+</div>
+
+<div class="card-body">
+
+<h5 class="card-title fw-bold" style="color:#2C3E50;">
+@product.Name
+</h5>
+
+<p class="card-text text-muted small">
+@product.Description
+</p>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+
+<div>
+
+<span class="h5 fw-bold" style="color:#27AE60;">
+$@product.Price
+</span>
+
+@if(product.StockQuantity > 0)
+{
+<small class="text-muted d-block">
+@product.StockQuantity left
+</small>
+}
+
+</div>
+
+</div>
+
+<!-- ADMIN BUTTONS ALWAYS VISIBLE -->
+
+<div class="d-flex gap-2">
+
+<a asp-controller="Admin"
+asp-action="EditProduct"
+asp-route-id="@product.Id"
+class="btn"
+style="background:#f39c12;color:white;border-radius:8px;">
+
+<i class="fas fa-edit me-1"></i>Edit
+
+</a>
+
+<a asp-controller="Admin"
+asp-action="DeleteProduct"
+asp-route-id="@product.Id"
+class="btn"
+style="background:#e74c3c;color:white;border-radius:8px;"
+onclick="return confirm('Are you sure you want to delete this product?');">
+
+<i class="fas fa-trash me-1"></i>Delete
+
+</a>
+
+</div>
+
+</div>
+
+<div class="card-footer bg-white border-0 pb-3">
+
+<div class="d-flex justify-content-between">
+
+<small class="text-muted">
+Added: @product.AddedDate.ToString("MMM dd, yyyy")
+</small>
+
+<small class="text-muted">
+SKU: GR@(product.Id.ToString("D4"))
+</small>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+}
+
+</div>
+
+</div>
+
+}
+
+</div>
+
+@section Scripts{
+
+<script>
+
+document.getElementById("categoryFilter").addEventListener("change", function(){
+
+var selected = this.value;
+
+var sections = document.querySelectorAll(".category-section");
+
+sections.forEach(function(section){
+
+var category = section.getAttribute("data-category");
+
+if(selected === "All" || category === selected){
+
+section.style.display = "block";
+
+}
+else{
+
+section.style.display = "none";
+
+}
+
+});
+
+});
+
+</script>
+
+}

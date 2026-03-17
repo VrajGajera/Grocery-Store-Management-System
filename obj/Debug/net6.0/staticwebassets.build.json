@@ -1,0 +1,39 @@
+{
+  "Version": 1,
+  "Hash": "4+//FtbtLfhuTPO8YtEa/6a4PNm7R0OOWzDyuVMJ9uM=",
+  "Source": "Grosary_net",
+  "BasePath": "_content/Grosary_net",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "Grosary_net\\wwwroot",
+      "Source": "Grosary_net",
+      "ContentRoot": "D:\\Grosary_net\\Grosary_net\\wwwroot\\",
+      "BasePath": "_content/Grosary_net",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "D:\\Grosary_net\\Grosary_net\\wwwroot\\css\\site.css",
+      "SourceId": "Grosary_net",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Grosary_net\\Grosary_net\\wwwroot\\",
+      "BasePath": "_content/Grosary_net",
+      "RelativePath": "css/site.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\site.css"
+    }
+  ]
+}

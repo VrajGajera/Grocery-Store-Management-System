@@ -1,0 +1,516 @@
+@* @model IEnumerable<Grosary_net.Models.Product> *@
+@model List<Grosary_net.Models.Product>
+
+@{
+    ViewData["Title"] = "Products";
+    var categories = Model.GroupBy(p => p.Category);
+}
+<style>
+
+/* ===== Product Card ===== */
+
+/* CART SECTION */
+
+.cart-section{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:8px;
+flex-wrap:nowrap;
+margin-top:10px;
+}
+
+/* STOCK GREEN BOX */
+
+.stock-pill {
+    background: #E67E22;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    flex: 1;
+    text-align: center;
+}
+
+/* QUANTITY BOX */
+
+.input-group {
+    max-width: 110px;
+    min-width: 95px;
+}
+/* CARD SIZE */
+.product-card{
+border-radius:18px;
+overflow:hidden;
+height:100%;
+border:none;
+transition:0.3s;
+background:#fff;
+}
+
+/* HOVER EFFECT */
+.product-card:hover{
+transform:translateY(-5px);
+box-shadow:0 12px 30px rgba(0,0,0,0.12);
+}
+
+/* IMAGE SIZE */
+.image-container img{
+height:200px;
+width:100%;
+object-fit:cover;
+}
+
+/* BODY SPACING */
+.card-body{
+padding:18px;
+display:flex;
+flex-direction:column;
+justify-content:space-between;
+gap: 10px;
+}
+
+/* TITLE */
+.card-title{
+font-size:20px;
+font-weight:600;
+margin-bottom:8px;
+}
+
+/* DESCRIPTION */
+.card-text{
+font-size:14px;
+line-height:1.4;
+height:40px;
+overflow:hidden;
+}
+
+/* PRICE */
+.price-tag {
+    background: #E67E22;
+    color: white !important;
+    font-weight: 700;
+    font-size: 14px !important;
+    padding: 6px 14px;
+    border-radius: 20px;
+    white-space: nowrap;
+    min-width: 70px;
+    text-align: center;
+}
+
+/* PRICE + STOCK ALIGN */
+.price-stock {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+
+/* ADD BUTTON */
+.add-to-cart-btn{
+background:#E67E22;
+border:none;
+padding:6px 14px;
+border-radius:10px;
+font-weight:600;
+white-space:nowrap;
+}
+
+/* CATEGORY BADGE */
+.category-badge{
+font-size:11px;
+padding:5px 10px;
+border-radius:20px;
+}
+
+/* FOOTER */
+.card-footer{
+font-size:13px;
+padding:12px 18px;
+}
+
+/* ANIMATION */
+.fade-in-up{
+animation:none;
+}
+/* STOCK + CART LAYOUT */
+
+.cart-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+/* STOCK BAR */
+
+.stock-bar{
+background:#E67E22;
+height:32px;
+border-radius:20px;
+display:flex;
+align-items:center;
+padding:0 15px;
+color:white;
+font-weight:600;
+font-size:14px;
+min-width:120px;
+}
+
+/* QUANTITY INPUT */
+
+.qty-box{
+display:flex;
+align-items:center;
+gap:5px;
+}
+
+.qty-box input{
+width:40px;
+text-align:center;
+}
+
+/* ADD BUTTON */
+
+.add-to-cart-btn{
+background:#E67E22;
+border:none;
+padding:6px 16px;
+border-radius:10px;
+font-weight:600;
+white-space:nowrap;
+}
+.add-to-cart-btn:hover{
+background:#E67E22;
+}
+.cart-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+}
+.category-filter{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:20px;
+}
+.product-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:10px;
+}
+
+.filter-box{
+background:#f5f5fb;
+padding:15px 20px;
+border-radius:12px;
+width:250px;
+margin-bottom:0px;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+.filter-box label{
+display:block;
+font-weight:600;
+margin-bottom:6px;
+}
+
+.filter-dropdown{
+width:100%;
+padding:6px 10px;
+border-radius:8px;
+border:1px solid #ccc;
+cursor:pointer;
+}
+
+#topBtn{
+position:fixed;
+bottom:30px;
+right:30px;
+background:#27AE60;
+color:white;
+border:none;
+padding:12px 16px;
+border-radius:50%;
+font-size:18px;
+cursor:pointer;
+display:none;
+box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+
+#topBtn:hover{
+background:#1e8449;
+}
+
+@@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+</style>
+
+<div class="container mt-2">
+    <div class="product-header">
+
+<h2 class="mb-2" style="color:#2C3E50;">Our Fresh Products</h2>
+
+<div class="filter-box">
+
+<label>Filter by</label>
+
+<select id="categoryFilter" class="filter-dropdown">
+<option value="All">All</option>
+
+@foreach (var cat in categories)
+{
+<option value="@cat.Key.Replace(" ","")">@cat.Key</option>
+}
+
+</select>
+
+</div>
+
+</div>
+    @foreach (var category in categories)
+    {
+       <h3 class="category-section" data-category="@category.Key">
+        @category.Key
+    </h3>
+
+        <div class="row">
+            @foreach (var product in category)
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4 product-item" data-category="@product.Category">
+                    <div class="card h-100 shadow-sm product-card">
+
+                        <div class="image-container position-relative">
+                            <img src="@Url.Content(product.ImageUrl)" 
+     class="card-img-top"
+     alt="@product.Name"
+     style="height:200px; object-fit:cover;
+     @(product.StockQuantity == 0 ? "filter: grayscale(100%); opacity:0.6;" : "")">
+
+                            <span class="position-absolute top-0 end-0 m-2 badge category-badge"
+                                  style="background:#2C3E50;color:white;">
+                                @product.Category
+                            </span>
+
+                            @if (product.StockQuantity == 0)
+{
+    <span class="position-absolute top-0 start-0 m-2 badge"
+          style="background:black;color:white;">
+        Out Of Stock
+    </span>
+}
+else if (product.StockQuantity < 10)
+{
+    <span class="position-absolute top-0 start-0 m-2 badge"
+          style="background:#dc3545;color:white;">
+        Low Stock
+    </span>
+}
+                        </div>
+
+                        <div class="card-body">
+                            <h5 class="card-title" style="color:#2C3E50;">@product.Name</h5>
+
+                            <p class="card-text text-muted small">
+                                @product.Description
+                            </p>
+
+                            <div class="cart-row">
+
+    <!-- Row 1: Price + Stock -->
+    <div class="price-stock">
+        <span class="price-tag">$@product.Price</span>
+       <span class="stock-pill">
+@(product.StockQuantity == 0 ? "Out Of Stock" : product.StockQuantity + " in stock")
+</span>
+    </div>
+
+    <!-- Row 2: Qty + Add Button -->
+    @if (product.StockQuantity > 0)
+    {
+        <form asp-action="AddToCart"
+              asp-controller="User"
+              method="get"
+              class="cart-bottom">
+
+            <input type="hidden" name="productId" value="@product.Id" />
+
+            <div class="input-group input-group-sm">
+                <button class="btn btn-outline-secondary" type="button"
+                        onclick="this.nextElementSibling.stepDown();">-</button>
+
+                <input type="number" name="quantity" value="1"
+                       min="1" max="@product.StockQuantity"
+                       class="form-control text-center" />
+
+                <button class="btn btn-outline-secondary" type="button"
+                        onclick="this.previousElementSibling.stepUp();">+</button>
+            </div>
+
+            <button type="submit" onclick="saveScroll()"
+                    class="btn add-to-cart-btn"
+                    style="background:#E67E22;color:white;flex-shrink:0;">
+                <i class="fas fa-cart-plus me-1"></i>Add
+            </button>
+
+        </form>
+    }
+    else
+    {
+        <button class="btn w-100" disabled
+                style="background:#6c757d;color:white;">
+            Out of Stock
+        </button>
+    }
+
+</div>
+                        </div>
+
+                        <div class="card-footer bg-white border-0 pb-3">
+                            <div class="d-flex justify-content-between">
+
+                                <small class="text-muted">
+                                    <i class="fas fa-box me-1"
+                                       style="color:#E67E22;"></i>
+                                    @product.Category
+                                </small>
+
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar me-1"
+                                       style="color:#E67E22;"></i>
+                                    @product.AddedDate.ToString("MMM dd")
+                                </small>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+<button onclick="scrollToTop()" id="topBtn">
+↑
+</button>
+<script>
+
+document.getElementById("categoryFilter").addEventListener("change", function(){
+
+    var selected = this.value;
+
+    var products = document.querySelectorAll(".product-item");
+    var sections = document.querySelectorAll(".category-section");
+
+    // Products filter
+    products.forEach(function(product){
+
+        var category = product.getAttribute("data-category");
+
+        if(selected === "All" || category.replace(/\s/g,'') === selected){
+
+            product.style.display = "block";
+
+        }
+        else{
+
+            product.style.display = "none";
+
+        }
+
+    });
+
+    // Category headings filter
+    sections.forEach(function(section){
+
+        var category = section.getAttribute("data-category");
+
+        if(selected === "All" || category.replace(/\s/g,'') === selected){
+
+            section.style.display = "block";
+
+        }
+        else{
+
+            section.style.display = "none";
+
+        }
+
+    });
+
+});
+
+
+function saveScroll(){
+    localStorage.setItem("scrollPosition", window.scrollY);
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    var pos = localStorage.getItem("scrollPosition");
+
+    if(pos){
+        window.scrollTo({
+            top: pos,
+            behavior: "smooth"
+        });
+
+        localStorage.removeItem("scrollPosition");
+    }
+
+});
+
+
+function scrollToCategory(category){
+
+   if(category === "All"){
+        window.scrollTo(0,0);
+        return;
+    }
+
+    var element = document.getElementById(category);
+
+    if(element){
+        element.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }
+}
+
+window.onscroll = function() {
+
+    var btn = document.getElementById("topBtn");
+
+    if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+        btn.style.display = "block";
+    } 
+    else {
+        btn.style.display = "none";
+    }
+};
+
+function scrollToTop(){
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+</script>

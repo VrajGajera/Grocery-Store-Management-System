@@ -1,0 +1,51 @@
+@{
+    ViewData["Title"] = "Customer Login";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header" style="background-color: #2C3E50;">
+                    <h4 class="text-white mb-0">
+                        <i class="fas fa-user me-2" style="color: #27AE60;"></i>
+                        Customer Login
+                    </h4>
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(ViewBag.Error))
+                    {
+                        <div class="alert alert-danger">@ViewBag.Error</div>
+                    }
+
+                    <form method="post" autocomplete="off">
+                        <div class="mb-3">
+                            <label class="form-label" style="color: #2C3E50;">Username</label>
+                            <input type="text" name="username" class="form-control" autocomplete="off" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" style="color: #2C3E50;">Password</label>
+                            <input type="password" name="password" class="form-control" autocomplete="off" required />
+                        </div>
+                        <button type="submit" class="btn w-100" style="background-color: #27AE60; color: white;">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </button>
+                    </form>
+
+                    <div class="text-center mt-3">
+                        <p>Don't have an account? <a href="/Account/Register" style="color: #27AE60;">Register here</a></p>
+                    </div>
+                    
+                    <!-- Demo credentials -->
+                    <div class="alert alert-light mt-3">
+                        <small>
+                            <strong>Demo Customer Credentials:</strong><br>
+                            Username: <strong>john</strong><br>
+                            Password: <strong>john123</strong>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
